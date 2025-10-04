@@ -1,8 +1,10 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// 负责展示分词器 UI 的主界面。
 struct TokenizerMainView: View {
     @StateObject private var viewModel: TokenizerViewModel
+    @State private var isDropTarget: Bool = false
 
     init(viewModel: TokenizerViewModel = TokenizerViewModel()) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -15,6 +17,9 @@ struct TokenizerMainView: View {
             resultSection
         }
         .frame(minWidth: 700, minHeight: 400)
+        .alert(item: $viewModel.activeAlert) { alert in
+            Alert(title: Text("提示"), message: Text(alert.message), dismissButton: .default(Text("好的")))
+        }
     }
 
     private var inputSection: some View {
@@ -24,8 +29,11 @@ struct TokenizerMainView: View {
             TextEditor(text: $viewModel.inputText)
                 .font(.body)
                 .padding(8)
-                .background(Color(NSColor.textBackgroundColor))
+                .background(isDropTarget ? Color.accentColor.opacity(0.2) : Color(NSColor.textBackgroundColor))
                 .cornerRadius(8)
+                .onDrop(of: [UTType.fileURL], isTargeted: $isDropTarget) { providers in
+                    viewModel.handleDrop(providers: providers)
+                }
             Spacer()
         }
         .padding()
@@ -79,6 +87,12 @@ struct TokenizerMainView: View {
                         Text(token)
                             .font(.body)
                             .multilineTextAlignment(.leading)
+                        Spacer()
+                        if let frequency = viewModel.tokenFrequencies[token] {
+                            Text("频次：\(frequency)")
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
                 .listStyle(.plain)
