@@ -9,6 +9,25 @@ struct DashboardView: View {
     private let rankColumnWidth: CGFloat = 56
     private let fileSizeColumnWidth: CGFloat = 80
     private let fileDateColumnWidth: CGFloat = 112
+    private let processingTrendSamples: [ProcessingTrendPoint] = [
+        .init(index: 0, value: 168),
+        .init(index: 1, value: 154),
+        .init(index: 2, value: 149),
+        .init(index: 3, value: 132),
+        .init(index: 4, value: 141),
+        .init(index: 5, value: 135),
+        .init(index: 6, value: 128),
+        .init(index: 7, value: 121),
+        .init(index: 8, value: 118),
+        .init(index: 9, value: 112)
+    ]
+
+    private struct ProcessingTrendPoint: Identifiable {
+        let index: Int
+        let value: Double
+
+        var id: Int { index }
+    }
 
     var body: some View {
         ScrollView {
@@ -22,6 +41,7 @@ struct DashboardView: View {
                     )
                 }
 
+                processingTrendCard
                 wordFrequencyCard
                 recentFilesCard
                 quickStartCard
@@ -40,6 +60,33 @@ struct DashboardView: View {
                 alignment: .top
             )
         ]
+    }
+
+    private var processingTrendCard: some View {
+        Card(title: "处理耗时趋势", subtitle: "最近 10 次任务 (ms)") {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+                SparklineView(
+                    data: processingTrendSamples,
+                    value: \ProcessingTrendPoint.value,
+                    lineWidth: 2,
+                    cornerRadius: 12,
+                    inset: DesignSystem.Spacing.sm
+                )
+                .frame(height: 96)
+
+                HStack(alignment: .firstTextBaseline) {
+                    Text("最近一次")
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundStyle(DesignSystem.Colors.textSecondary)
+                    Spacer()
+                    if let latest = processingTrendSamples.last?.value {
+                        Text("\(Int(latest)) ms")
+                            .font(DesignSystem.Typography.body)
+                            .foregroundStyle(DesignSystem.Colors.textPrimary)
+                    }
+                }
+            }
+        }
     }
 
     private var wordFrequencyCard: some View {
