@@ -1,10 +1,8 @@
 import SwiftUI
-import UniformTypeIdentifiers
 
 /// 负责展示分词器 UI 的主界面。
 struct TokenizerMainView: View {
     @StateObject private var viewModel: TokenizerViewModel
-    @State private var isDropTarget: Bool = false
 
     init(viewModel: TokenizerViewModel = TokenizerViewModel()) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -50,6 +48,24 @@ struct TokenizerMainView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(DesignSystem.Colors.accent)
 
+                if !viewModel.inputText.isEmpty {
+                    DropZone(
+                        icon: "tray.and.arrow.down.fill",
+                        title: "拖拽导入",
+                        message: "拖入 .txt/.xlsx",
+                        size: .compact,
+                        isLoading: viewModel.isBusy,
+                        loadingMessage: viewModel.busyStatusMessage,
+                        onOpen: {
+                            viewModel.handleOpenFileCommand()
+                        },
+                        onDrop: { providers in
+                            viewModel.handleDrop(providers: providers)
+                        }
+                    )
+                    .frame(width: DesignSystem.Spacing.lg * 9)
+                }
+
                 Menu {
                     Button("导出 CSV") {
                         viewModel.handleExportCSV()
@@ -94,6 +110,23 @@ struct TokenizerMainView: View {
         VStack(spacing: DesignSystem.Spacing.lg) {
             Card(title: "输入文本", subtitle: "支持粘贴、拖拽或导入文件") {
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+                    if viewModel.inputText.isEmpty {
+                        DropZone(
+                            icon: "square.and.arrow.down.on.square.fill",
+                            title: "拖拽文件以导入",
+                            message: "拖拽 .txt/.xlsx 或按 ⌘O 打开",
+                            size: .large,
+                            isLoading: viewModel.isBusy,
+                            loadingMessage: viewModel.busyStatusMessage,
+                            onOpen: {
+                                viewModel.handleOpenFileCommand()
+                            },
+                            onDrop: { providers in
+                                viewModel.handleDrop(providers: providers)
+                            }
+                        )
+                    }
+
                     inputEditor
 
                     Divider()
@@ -109,19 +142,12 @@ struct TokenizerMainView: View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill(DesignSystem.Colors.background)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .strokeBorder(isDropTarget ? DesignSystem.Colors.accent : DesignSystem.Colors.divider, lineWidth: isDropTarget ? 2 : 1)
-                )
 
             TextEditor(text: $viewModel.inputText)
                 .font(DesignSystem.Typography.body)
                 .padding(DesignSystem.Spacing.sm)
                 .background(Color.clear)
                 .frame(minHeight: 320)
-                .onDrop(of: [UTType.fileURL], isTargeted: $isDropTarget) { providers in
-                    viewModel.handleDrop(providers: providers)
-                }
 
             if viewModel.inputText.isEmpty {
                 Text("粘贴文本、拖入 .txt/.xlsx，或按 ⌘O 打开文件开始分词。")
