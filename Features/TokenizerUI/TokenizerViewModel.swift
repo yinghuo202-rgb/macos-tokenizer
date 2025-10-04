@@ -12,6 +12,32 @@ struct TokenizerAlert: Identifiable {
 /// 负责协调 UI 与分词引擎的视图模型。
 @MainActor
 final class TokenizerViewModel: ObservableObject {
+    /// 可选的分词引擎枚举，当前仅启用系统默认引擎。
+    enum EngineOption: String, CaseIterable, Identifiable {
+        case system
+        case jieba
+        case remote
+
+        var id: String { rawValue }
+
+        /// 展示名称，供 UI 使用。
+        var displayName: String {
+            switch self {
+            case .system:
+                return "系统默认引擎"
+            case .jieba:
+                return "cppjieba（即将支持）"
+            case .remote:
+                return "远程服务（规划中）"
+            }
+        }
+
+        /// 标记引擎是否可以立即启用。
+        var isAvailable: Bool {
+            self == .system
+        }
+    }
+
     /// 用户输入文本，与界面左侧输入框双向绑定。
     @Published var inputText: String {
         didSet {
@@ -39,6 +65,12 @@ final class TokenizerViewModel: ObservableObject {
 
     /// 当前正在处理的任务提示文案。
     @Published var busyStatusMessage: String?
+
+    /// 最近一次分词耗时（秒）。
+    @Published private(set) var processingDuration: TimeInterval = 0
+
+    /// 当前选中的分词引擎。
+    @Published var selectedEngine: EngineOption = .system
 
     /// 搜索框输入的关键字，驱动分词结果高亮。
     @Published var searchQuery: String = ""
@@ -71,7 +103,9 @@ final class TokenizerViewModel: ObservableObject {
     }
 
     private func processInput() {
+        let startTime = CFAbsoluteTimeGetCurrent()
         let result = engine.tokenize(inputText)
+        processingDuration = CFAbsoluteTimeGetCurrent() - startTime
         tokens = result
         totalTokenCount = result.count
         uniqueTokenCount = Set(result).count
@@ -348,5 +382,20 @@ final class TokenizerViewModel: ObservableObject {
             return
         }
         scheduleSearch(for: normalizedSearchQuery, delay: 0)
+    }
+
+    /// 列出 UI 可选择的分词引擎选项。
+    public var engineOptions: [EngineOption] {
+        EngineOption.allCases
+    }
+
+    /// 处理用户在 UI 中选择分词引擎的动作。
+    /// - Parameter option: 用户选择的目标引擎。
+    public func selectEngine(_ option: EngineOption) {
+        guard option.isAvailable else {
+            activeAlert = TokenizerAlert(message: "该引擎即将上线，当前仍使用系统默认引擎。")
+            return
+        }
+        selectedEngine = option
     }
 }
