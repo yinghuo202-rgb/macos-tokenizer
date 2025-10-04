@@ -5,6 +5,9 @@ import CoreXLSX
 public enum FileImportError: LocalizedError {
     case unsupportedType
     case readFailed(underlying: Error)
+    case unsupportedEncoding
+    case emptyWorkbook
+    case unsupportedCell
     case parseFailed(underlying: Error)
 
     public var errorDescription: String? {
@@ -13,6 +16,12 @@ public enum FileImportError: LocalizedError {
             return "暂不支持该文件格式，请选择 TXT 或 XLSX 文件。"
         case .readFailed(let underlying):
             return "文件读取失败：\(underlying.localizedDescription)"
+        case .unsupportedEncoding:
+            return "无法识别文本编码，请确认文件为 UTF-8 等常见格式。"
+        case .emptyWorkbook:
+            return "Excel 文件没有可读取的工作表或单元格。"
+        case .unsupportedCell:
+            return "Excel 文件包含无法转换为文本的单元格。"
         case .parseFailed(let underlying):
             return "文件解析失败：\(underlying.localizedDescription)"
         }
@@ -62,11 +71,30 @@ public struct TextFileImporter: FileImporting {
     }
 
     public func importContents(from url: URL) throws -> String {
+        let data: Data
         do {
-            return try String(contentsOf: url, encoding: .utf8)
+            data = try Data(contentsOf: url)
         } catch {
             throw FileImportError.readFailed(underlying: error)
         }
+
+        let encodings: [String.Encoding] = [
+            .utf8,
+            .utf16,
+            .unicode,
+            .utf16LittleEndian,
+            .utf16BigEndian,
+            .utf32LittleEndian,
+            .utf32BigEndian
+        ]
+
+        for encoding in encodings {
+            if let content = String(data: data, encoding: encoding) {
+                return content
+            }
+        }
+
+        throw FileImportError.unsupportedEncoding
     }
 }
 
@@ -85,19 +113,33 @@ public struct ExcelFileImporter: FileImporting {
 
         do {
             let sharedStrings = try file.parseSharedStrings()
-            var lines: [String] = []
+            let workbooks = try file.parseWorkbooks()
+            guard !workbooks.isEmpty else {
+                throw FileImportError.emptyWorkbook
+            }
 
-            for workbook in try file.parseWorkbooks() {
+            var lines: [String] = []
+            var hasReadableCell = false
+
+            for workbook in workbooks {
                 for (_, path) in try file.parseWorksheetPaths(workbook: workbook) {
                     let worksheet = try file.parseWorksheet(at: path)
                     let rows = worksheet.data?.rows ?? []
                     for row in rows {
-                        let values = row.cells.compactMap { cell -> String? in
+                        var values: [String] = []
+                        for cell in row.cells {
                             if let stringValue = cell.stringValue(sharedStrings) {
-                                return stringValue
+                                hasReadableCell = true
+                                values.append(stringValue)
+                            } else if let rawValue = cell.value {
+                                hasReadableCell = true
+                                values.append(rawValue)
+                            } else if let inline = cell.inlineString?.text {
+                                hasReadableCell = true
+                                values.append(inline)
                             }
-                            return cell.value
                         }
+
                         let trimmed = values.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                         if trimmed.allSatisfy({ $0.isEmpty }) {
                             continue
@@ -107,7 +149,13 @@ public struct ExcelFileImporter: FileImporting {
                 }
             }
 
+            guard hasReadableCell else {
+                throw FileImportError.unsupportedCell
+            }
+
             return lines.joined(separator: "\n")
+        } catch let error as FileImportError {
+            throw error
         } catch {
             throw FileImportError.parseFailed(underlying: error)
         }

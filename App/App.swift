@@ -20,11 +20,13 @@ struct MacosTokenizerApp: App {
                     viewModel.handleExportCSV()
                 }
                 .keyboardShortcut("e", modifiers: [.command, .shift])
+                .disabled(viewModel.isBusy)
 
                 Button("导出 JSON") {
                     viewModel.handleExportJSON()
                 }
                 .keyboardShortcut("j", modifiers: [.command, .shift])
+                .disabled(viewModel.isBusy)
 
                 Button("清空") {
                     viewModel.handleClear()
