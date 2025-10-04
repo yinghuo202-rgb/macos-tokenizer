@@ -7,7 +7,7 @@ struct MacosTokenizerApp: App {
 
     var body: some Scene {
         WindowGroup {
-            TokenizerMainView(viewModel: viewModel)
+            AppShellView(tokenizerViewModel: viewModel)
         }
         .commands {
             CommandMenu("文件操作") {
