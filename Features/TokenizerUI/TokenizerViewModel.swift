@@ -84,6 +84,7 @@ final class TokenizerViewModel: ObservableObject {
     private let searchQueue = DispatchQueue(label: "com.macos-tokenizer.search", qos: .userInitiated)
     private var searchWorkItem: DispatchWorkItem?
     private var normalizedSearchQuery: String = ""
+    private let supportedExtensions: Set<String> = ["txt", "xlsx"]
 
     /// 当前匹配到的 token 索引集合，用于驱动列表高亮。
     @Published private(set) var matchedTokenIndices: Set<Int> = []
@@ -158,10 +159,13 @@ final class TokenizerViewModel: ObservableObject {
             return false
         }
 
-        guard let provider = providers.first(where: { $0.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) }) else {
-            presentError(source: "Importer", message: "暂不支持该文件类型，请拖入 TXT 或 XLSX。", error: nil)
+        let fileProviders = providers.filter { $0.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) }
+        guard let provider = fileProviders.first else {
+            presentError(source: "Importer", message: "仅支持 .txt / .xlsx 文件。", error: nil)
             return false
         }
+
+        let ignoredCount = max(0, fileProviders.count - 1)
 
         provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
             if let error {
@@ -173,11 +177,11 @@ final class TokenizerViewModel: ObservableObject {
 
             if let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) {
                 DispatchQueue.main.async {
-                    self.importFile(from: url)
+                    self.importFile(from: url, ignoredCount: ignoredCount)
                 }
             } else if let url = item as? URL {
                 DispatchQueue.main.async {
-                    self.importFile(from: url)
+                    self.importFile(from: url, ignoredCount: ignoredCount)
                 }
             } else {
                 DispatchQueue.main.async {
@@ -223,7 +227,20 @@ final class TokenizerViewModel: ObservableObject {
         return "tokenizer-result-\(formatter.string(from: Date())).\(ext)"
     }
 
-    private func importFile(from url: URL) {
+    private func importFile(from url: URL, ignoredCount: Int = 0) {
+        let ext = url.pathExtension.lowercased()
+        guard supportedExtensions.contains(ext) else {
+            presentError(source: "Importer", message: "仅支持 .txt / .xlsx", error: nil)
+            return
+        }
+
+        let successMessage: (String) -> String = { fileName in
+            if ignoredCount > 0 {
+                return "已导入 \(fileName)，忽略其余 \(ignoredCount) 个文件。"
+            }
+            return "已导入 \(fileName)"
+        }
+
         runAsync(
             source: "Importer",
             busyMessage: "正在导入 \(url.lastPathComponent)…",
@@ -235,7 +252,7 @@ final class TokenizerViewModel: ObservableObject {
             },
             success: { content in
                 self.inputText = content
-                self.activeAlert = TokenizerAlert(message: "已导入 \(url.lastPathComponent)")
+                self.activeAlert = TokenizerAlert(message: successMessage(url.lastPathComponent))
                 print("[Importer] 导入成功: \(url.lastPathComponent)")
             },
             errorMessageBuilder: { error in
