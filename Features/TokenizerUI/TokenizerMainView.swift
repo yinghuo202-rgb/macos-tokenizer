@@ -75,6 +75,23 @@ struct TokenizerMainView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 
+            if viewModel.isBusy {
+                Label(viewModel.busyStatusMessage ?? "处理中…", systemImage: "hourglass")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color(NSColor.windowBackgroundColor))
+                    .cornerRadius(8)
+
+                Button("取消") {}
+                    .font(.footnote)
+                    .disabled(true)
+                    .buttonStyle(.borderless)
+                    .foregroundStyle(.secondary)
+                    .accessibilityLabel("取消当前任务（开发中）")
+            }
+
             if !viewModel.searchQuery.isEmpty {
                 Button {
                     viewModel.updateSearch(query: "")

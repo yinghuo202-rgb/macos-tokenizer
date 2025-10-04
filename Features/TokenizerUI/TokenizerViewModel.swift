@@ -34,6 +34,12 @@ final class TokenizerViewModel: ObservableObject {
     /// 当前需要展示的提示信息。
     @Published var activeAlert: TokenizerAlert?
 
+    /// 是否有后台任务正在处理，用于驱动“处理中”状态。
+    @Published var isBusy: Bool = false
+
+    /// 当前正在处理的任务提示文案。
+    @Published var busyStatusMessage: String?
+
     /// 搜索框输入的关键字，驱动分词结果高亮。
     @Published var searchQuery: String = ""
 
@@ -113,15 +119,20 @@ final class TokenizerViewModel: ObservableObject {
     /// - Parameter providers: 拖拽提供的项目列表。
     /// - Returns: 是否接管本次拖拽。
     public func handleDrop(providers: [NSItemProvider]) -> Bool {
+        guard !isBusy else {
+            presentError(source: "Importer", message: "当前正在处理其他任务，请稍后再试。", error: nil)
+            return false
+        }
+
         guard let provider = providers.first(where: { $0.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) }) else {
-            presentError(message: "暂不支持该文件类型，请拖入 TXT 或 XLSX。", error: nil)
+            presentError(source: "Importer", message: "暂不支持该文件类型，请拖入 TXT 或 XLSX。", error: nil)
             return false
         }
 
         provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
             if let error {
                 DispatchQueue.main.async {
-                    self.presentError(message: "读取拖拽文件失败。", error: error)
+                    self.presentError(source: "Importer", message: "读取拖拽文件失败。", error: error)
                 }
                 return
             }
@@ -136,7 +147,7 @@ final class TokenizerViewModel: ObservableObject {
                 }
             } else {
                 DispatchQueue.main.async {
-                    self.presentError(message: "无法识别拖入的文件地址。", error: nil)
+                    self.presentError(source: "Importer", message: "无法识别拖入的文件地址。", error: nil)
                 }
             }
         }
@@ -147,6 +158,11 @@ final class TokenizerViewModel: ObservableObject {
     private func presentSavePanel(for format: TokenExportFormat) {
         guard !tokens.isEmpty else {
             activeAlert = TokenizerAlert(message: "暂无可导出的分词结果。")
+            return
+        }
+
+        guard !isBusy else {
+            presentError(source: "Exporter", message: "当前正在处理其他任务，请稍后再试。", error: nil)
             return
         }
 
@@ -174,50 +190,101 @@ final class TokenizerViewModel: ObservableObject {
     }
 
     private func importFile(from url: URL) {
-        print("[导入] 准备读取文件: \(url.path)")
-        let service = fileImportService
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                let content = try service.importFile(at: url)
-                DispatchQueue.main.async {
-                    self.inputText = content
-                    self.activeAlert = TokenizerAlert(message: "已导入 \(url.lastPathComponent)")
-                    print("[导入] 成功: \(url.lastPathComponent)")
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    self.presentError(message: (error as? LocalizedError)?.errorDescription ?? "导入失败。", error: error)
-                }
+        runAsync(
+            source: "Importer",
+            busyMessage: "正在导入 \(url.lastPathComponent)…",
+            work: { [fileImportService] () throws -> String in
+                print("[Importer] 开始导入: \(url.path)")
+                let content = try fileImportService.importFile(at: url)
+                print("[Importer] 完成导入: \(url.lastPathComponent)")
+                return content
+            },
+            success: { content in
+                self.inputText = content
+                self.activeAlert = TokenizerAlert(message: "已导入 \(url.lastPathComponent)")
+                print("[Importer] 导入成功: \(url.lastPathComponent)")
+            },
+            errorMessageBuilder: { error in
+                self.importErrorMessage(for: url, error: error)
             }
-        }
+        )
     }
 
     private func export(to url: URL, format: TokenExportFormat) {
-        let tokens = self.tokens
-        let service = exportService
-        print("[导出] 写入文件: \(url.path)")
-        DispatchQueue.global(qos: .userInitiated).async {
+        runAsync(
+            source: "Exporter",
+            busyMessage: "正在导出 \(url.lastPathComponent)…",
+            work: { [exportService, tokens] () throws -> Void in
+                print("[Exporter] 开始导出: \(url.path)")
+                try exportService.export(tokens: tokens, to: url, format: format)
+                print("[Exporter] 完成导出: \(url.lastPathComponent)")
+            },
+            success: { (_: Void) in
+                self.activeAlert = TokenizerAlert(message: "已导出至 \(url.lastPathComponent)")
+                print("[Exporter] 导出成功: \(url.lastPathComponent)")
+            },
+            errorMessageBuilder: { error in
+                self.exportErrorMessage(for: url, error: error)
+            }
+        )
+    }
+
+    private func presentError(source: String, message: String, error: Error?) {
+        if let error {
+            print("[\(source)] 错误: \(message) -> \(error)")
+        } else {
+            print("[\(source)] 错误: \(message)")
+        }
+        activeAlert = TokenizerAlert(message: message)
+    }
+
+    private func importErrorMessage(for url: URL, error: Error) -> String {
+        if let importError = error as? FileImportError, case .unsupportedType = importError {
+            return importError.errorDescription ?? "暂不支持该文件格式。"
+        }
+        let reason = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+        return "\(url.lastPathComponent) 导入失败：\(reason)"
+    }
+
+    private func exportErrorMessage(for url: URL, error: Error) -> String {
+        let reason = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+        return "导出 \(url.lastPathComponent) 失败：\(reason)"
+    }
+
+    private func runAsync<Result>(
+        source: String,
+        busyMessage: String,
+        work: @escaping () throws -> Result,
+        success: @escaping (Result) -> Void,
+        errorMessageBuilder: @escaping (Error) -> String
+    ) {
+        guard !isBusy else {
+            presentError(source: source, message: "当前正在处理其他任务，请稍后再试。", error: nil)
+            return
+        }
+
+        isBusy = true
+        busyStatusMessage = busyMessage
+
+        Task.detached(priority: .userInitiated) { [weak self] in
             do {
-                try service.export(tokens: tokens, to: url, format: format)
-                DispatchQueue.main.async {
-                    self.activeAlert = TokenizerAlert(message: "已导出至 \(url.lastPathComponent)")
-                    print("[导出] 成功: \(url.lastPathComponent)")
+                let result = try work()
+                await MainActor.run {
+                    guard let self else { return }
+                    self.isBusy = false
+                    self.busyStatusMessage = nil
+                    success(result)
                 }
             } catch {
-                DispatchQueue.main.async {
-                    self.presentError(message: (error as? LocalizedError)?.errorDescription ?? "导出失败。", error: error)
+                await MainActor.run {
+                    guard let self else { return }
+                    self.isBusy = false
+                    self.busyStatusMessage = nil
+                    let message = errorMessageBuilder(error)
+                    self.presentError(source: source, message: message, error: error)
                 }
             }
         }
-    }
-
-    private func presentError(message: String, error: Error?) {
-        if let error {
-            print("[错误] \(message) -> \(error)")
-        } else {
-            print("[错误] \(message)")
-        }
-        activeAlert = TokenizerAlert(message: message)
     }
 
     /// 更新搜索关键字，使用去抖控制匹配刷新频率。

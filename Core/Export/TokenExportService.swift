@@ -7,6 +7,20 @@ public enum TokenExportError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .writeFailed(let underlying):
+            if let cocoaError = underlying as? CocoaError {
+                switch cocoaError.code {
+                case .fileWriteNoPermission:
+                    return "导出失败：目标位置没有写入权限。"
+                case .fileWriteVolumeReadOnly:
+                    return "导出失败：目标磁盘为只读。"
+                case .fileWriteOutOfSpace:
+                    return "导出失败：磁盘空间不足。"
+                case .fileWriteFileExists:
+                    return "导出失败：目标文件正在被占用。"
+                default:
+                    break
+                }
+            }
             return "导出失败：\(underlying.localizedDescription)"
         }
     }
