@@ -3,6 +3,8 @@ import SwiftUI
 /// `AppShellView` 构建应用壳层，提供统一的侧边栏导航与顶部工具栏。
 struct AppShellView: View {
     @ObservedObject var tokenizerViewModel: TokenizerViewModel
+    @EnvironmentObject private var themeManager: ThemeManager
+    @Environment(\.colorScheme) private var systemColorScheme
     @StateObject private var dashboardViewModel = DashboardViewModel()
     @State private var selection: AppRoute? = .analyze
 
@@ -13,6 +15,14 @@ struct AppShellView: View {
             detailContainer
         }
         .navigationSplitViewStyle(.balanced)
+        .preferredColorScheme(themeManager.currentColorScheme)
+        .onAppear(perform: syncTheme)
+        .onChange(of: systemColorScheme) { _ in
+            syncTheme()
+        }
+        .onChange(of: themeManager.mode) { _ in
+            syncTheme()
+        }
     }
 
     private var sidebar: some View {
@@ -25,6 +35,8 @@ struct AppShellView: View {
             }
         }
         .listStyle(.sidebar)
+        .scrollContentBackground(.hidden)
+        .background(DesignSystem.Colors.background)
         .navigationTitle("macOS Tokenizer")
     }
 
@@ -33,11 +45,12 @@ struct AppShellView: View {
         return VStack(spacing: 0) {
             topBar(for: activeRoute)
             Divider()
+                .background(DesignSystem.Colors.separator)
             detailContent(for: activeRoute)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(nsColor: .underPageBackgroundColor))
+                .background(DesignSystem.Colors.background)
         }
-        .background(Color(nsColor: .windowBackgroundColor))
+        .background(DesignSystem.Colors.background)
     }
 
     private func topBar(for route: AppRoute) -> some View {
@@ -45,13 +58,16 @@ struct AppShellView: View {
             Label(route.title, systemImage: route.systemImageName)
                 .font(.title2)
                 .fontWeight(.semibold)
+                .foregroundStyle(DesignSystem.Colors.textPrimary)
             Spacer()
             HStack(spacing: 12) {
+                themeMenu
                 // 右侧预留操作区域，后续放入导入/导出等按钮。
             }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 12)
+        .background(DesignSystem.Colors.card)
     }
 
     @ViewBuilder
@@ -71,6 +87,32 @@ struct AppShellView: View {
             SettingsPlaceholderView()
         }
     }
+
+    private func syncTheme() {
+        themeManager.updateSystemColorScheme(systemColorScheme)
+        DesignSystem.Colors.use(themeManager.activePalette)
+        DesignSystem.Shadows.use(themeManager.activeShadows)
+    }
+
+    private var themeMenu: some View {
+        Menu {
+            ForEach(ThemeMode.allCases) { mode in
+                Button {
+                    themeManager.apply(mode)
+                } label: {
+                    Label(mode.displayName, systemImage: mode.symbolName)
+                    if themeManager.mode == mode {
+                        Spacer()
+                        Image(systemName: "checkmark")
+                    }
+                }
+            }
+        } label: {
+            Label(themeManager.mode.displayName, systemImage: themeManager.mode.symbolName)
+                .foregroundStyle(DesignSystem.Colors.textSecondary)
+        }
+        .menuStyle(.borderlessButton)
+    }
 }
 
 private struct SidebarItem: View {
@@ -87,7 +129,7 @@ private struct SidebarItem: View {
             .contentShape(Rectangle())
             .background(background)
             .clipShape(RoundedRectangle(cornerRadius: 8))
-            .foregroundStyle(isSelected ? Color.accentColor : Color.primary)
+            .foregroundStyle(isSelected ? DesignSystem.Colors.accent : DesignSystem.Colors.textPrimary)
             .onHover { hovering in
                 isHovered = hovering
             }
@@ -96,9 +138,9 @@ private struct SidebarItem: View {
     private var background: some View {
         Group {
             if isSelected {
-                Color.accentColor.opacity(0.15)
+                DesignSystem.Colors.accent.opacity(0.18)
             } else if isHovered {
-                Color.secondary.opacity(0.1)
+                DesignSystem.Colors.elevatedCard.opacity(0.6)
             } else {
                 Color.clear
             }

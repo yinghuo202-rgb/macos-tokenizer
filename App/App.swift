@@ -4,10 +4,12 @@ import SwiftUI
 @main
 struct MacosTokenizerApp: App {
     @StateObject private var viewModel = TokenizerViewModel()
+    @StateObject private var themeManager = ThemeManager()
 
     var body: some Scene {
         WindowGroup {
             AppShellView(tokenizerViewModel: viewModel)
+                .environmentObject(themeManager)
         }
         .commands {
             CommandMenu("文件操作") {
