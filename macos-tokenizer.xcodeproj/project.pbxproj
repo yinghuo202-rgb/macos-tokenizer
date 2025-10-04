@@ -7,6 +7,8 @@ objectVersion = 56;
 objects = {
 
 /* Begin PBXBuildFile section */
+B65B5A9D036A4BE789795A84 /* TokenizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C830EE3E1E43CDAD5AA945 /* TokenizationTests.swift */; };
+6F1E79D4D3714AC9B65E626D /* ExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE552B1A7EC243029B538E7E /* ExportTests.swift */; };
 B4F5C1C02B3ED4F500A67135 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F5C1BF2B3ED4F500A67135 /* App.swift */; };
 2FA758887D5B43D4BAA84185 /* FileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F0A11620D148B18BCFCAA2 /* FileImporter.swift */; };
 26FA4A835E1D48BC9B318148 /* TokenExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380E75CE018453A9CD891EC /* TokenExportService.swift */; };
@@ -27,6 +29,16 @@ FBE6498FE6F9436B99328C31 /* AppRoute.swift in Sources */ = {isa = PBXBuildFile; 
 04502E164CD842D590BA495E /* PlaceholderViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB6A35009C74410B4B03E35 /* PlaceholderViews.swift */; };
 CF24E5F479E44F8AB7EEF3DC /* CoreXLSX in Frameworks */ = {isa = PBXBuildFile; productRef = EEF23352D262499E805EC943 /* CoreXLSX */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+6D259992C5D5428795D72EE1 /* PBXContainerItemProxy */ = {
+    isa = PBXContainerItemProxy;
+    containerPortal = B4F5C1B72B3ED4F500A67135 /* Project object */;
+    proxyType = 1;
+    remoteGlobalIDString = B4F5C1BD2B3ED4F500A67135;
+    remoteInfo = "macos-tokenizer";
+};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 B4F5C1BF2B3ED4F500A67135 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
@@ -114,17 +126,101 @@ B4F5C1D42B3ED65A00A67135 /* Resources */ = {
 B4F5C1D52B3ED65A00A67135 /* Tests */ = {
     isa = PBXGroup;
     children = (
+        C3C830EE3E1E43CDAD5AA945 /* TokenizationTests.swift */,
+        CE552B1A7EC243029B538E7E /* ExportTests.swift */,
     );
     path = Tests;
     sourceTree = "<group>";
 };
 B4F5C1C12B3ED4F500A67135 /* Products */ = {
-isa = PBXGroup;
-children = (
-B4F5C1C22B3ED4F500A67135 /* macos-tokenizer.app */,
-);
-name = Products;
-sourceTree = "<group>";
+    isa = PBXGroup;
+    children = (
+        B4F5C1C22B3ED4F500A67135 /* macos-tokenizer.app */,
+        C2D2A5389B71451C91210B1C /* macos-tokenizerTests.xctest */,
+    );
+    name = Products;
+    sourceTree = "<group>";
+};
+780179E4928D4B5897785491 /* FileImporter */ = {
+    isa = PBXGroup;
+    children = (
+        C3F0A11620D148B18BCFCAA2 /* FileImporter.swift */,
+    );
+    path = FileImporter;
+    sourceTree = "<group>";
+};
+C1C538560398447F9A565F82 /* Export */ = {
+    isa = PBXGroup;
+    children = (
+        7380E75CE018453A9CD891EC /* TokenExportService.swift */,
+    );
+    path = Export;
+    sourceTree = "<group>";
+};
+92AFCC46E3634B0E860D32AD /* Infra */ = {
+    isa = PBXGroup;
+    children = (
+        34023BE631A4445FB75963AF /* ThemeManager.swift */,
+        C7B4C7594F7E4083ABC3E937 /* DesignSystem.swift */,
+    );
+    path = Infra;
+    sourceTree = "<group>";
+};
+F973C904657B4451AD509982 /* Tokenization */ = {
+    isa = PBXGroup;
+    children = (
+        2060CB0B49D24E7192DCFBE0 /* TokenizerEngine.swift */,
+    );
+    path = Tokenization;
+    sourceTree = "<group>";
+};
+5DC748DC03EF4A2CBF636E67 /* Components */ = {
+    isa = PBXGroup;
+    children = (
+        61421DCE6538403DB011DD6B /* Badge.swift */,
+        997A90E822BD4BE3B08B5DD0 /* Card.swift */,
+        7FD861277FFE48B5A43417D6 /* DropZone.swift */,
+        B1239203C21F4857BDCA8CA2 /* SparklineView.swift */,
+        5B6D09443B664F9BB4254A94 /* StatCard.swift */,
+        9B4BC57384E343848C567513 /* AppShell */,
+    );
+    path = Components;
+    sourceTree = "<group>";
+};
+9B4BC57384E343848C567513 /* AppShell */ = {
+    isa = PBXGroup;
+    children = (
+        138052E8AFE440BFB0B2A332 /* AppShellView.swift */,
+    );
+    path = AppShell;
+    sourceTree = "<group>";
+};
+D90358AE4B2C47E2A32EDCDE /* TokenizerUI */ = {
+    isa = PBXGroup;
+    children = (
+        CC2D013C8FFC43D2945128AB /* TokenizerMainView.swift */,
+        64CC7D8E166C4470BD7F6792 /* TokenizerViewModel.swift */,
+    );
+    path = TokenizerUI;
+    sourceTree = "<group>";
+};
+7D9831FFE2904D21AE3D3577 /* Dashboard */ = {
+    isa = PBXGroup;
+    children = (
+        CBB90BD7D50E49968D536BEE /* DashboardViewModel.swift */,
+        6EE8DB25B4C9412A87D1EBA0 /* DashboardView.swift */,
+    );
+    path = Dashboard;
+    sourceTree = "<group>";
+};
+2E63200CA82C4F2AB1E8B800 /* Shell */ = {
+    isa = PBXGroup;
+    children = (
+        B90A3A35E0EE46B0BE829BDA /* AppRoute.swift */,
+        0AB6A35009C74410B4B03E35 /* PlaceholderViews.swift */,
+    );
+    path = Shell;
+    sourceTree = "<group>";
 };
 780179E4928D4B5897785491 /* FileImporter */ = {
     isa = PBXGroup;
@@ -238,11 +334,15 @@ attributes = {
 BuildIndependentTargetsInParallel = 1;
 LastSwiftUpdateCheck = 1500;
 LastUpgradeCheck = 1500;
-TargetAttributes = {
-B4F5C1BD2B3ED4F500A67135 = {
-CreatedOnToolsVersion = 15.0;
-};
-};
+        TargetAttributes = {
+            B4F5C1BD2B3ED4F500A67135 = {
+                CreatedOnToolsVersion = 15.0;
+            };
+            82B545D366C94C488F187997 = {
+                CreatedOnToolsVersion = 15.0;
+                TestTargetID = B4F5C1BD2B3ED4F500A67135;
+            };
+        };
 };
 buildConfigurationList = B4F5C1BA2B3ED4F500A67135 /* Build configuration list for PBXProject "macos-tokenizer" */;
 compatibilityVersion = "Xcode 14.0";
@@ -263,6 +363,16 @@ en,
     );
 };
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+3147CEC330E244FFA0276023 /* Resources */ = {
+    isa = PBXResourcesBuildPhase;
+    buildActionMask = 2147483647;
+    files = (
+    );
+    runOnlyForDeploymentPostprocessing = 0;
+};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 B4F5C1BB2B3ED4F500A67135 /* Sources */ = {
@@ -414,10 +524,10 @@ SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 name = Debug;
 };
 B4F5C1CD2B3ED4F600A67135 /* Release */ = {
-isa = XCBuildConfiguration;
-buildSettings = {
-ALWAYS_SEARCH_USER_PATHS = NO;
-CLANG_ANALYZER_NONNULL = YES;
+    isa = XCBuildConfiguration;
+    buildSettings = {
+        ALWAYS_SEARCH_USER_PATHS = NO;
+        CLANG_ANALYZER_NONNULL = YES;
 CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 CLANG_ENABLE_MODULES = YES;
@@ -460,8 +570,50 @@ MTL_ENABLE_DEBUG_INFO = NO;
 SDKROOT = macosx;
 SWIFT_COMPILATION_MODE = wholemodule;
 SWIFT_OPTIMIZATION_LEVEL = "-O";
+    };
+    name = Release;
 };
-name = Release;
+B925708ED47A40B28F6DE3A4 /* Debug */ = {
+    isa = XCBuildConfiguration;
+    buildSettings = {
+        BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/macos-tokenizer.app/Contents/MacOS/macos-tokenizer";
+        CODE_SIGN_STYLE = Automatic;
+        COMBINE_HIDPI_IMAGES = YES;
+        CURRENT_PROJECT_VERSION = 1;
+        GENERATE_INFOPLIST_FILE = YES;
+        LD_RUNPATH_SEARCH_PATHS = (
+            "$(inherited)",
+            "@executable_path/../Frameworks",
+            "@loader_path/../Frameworks",
+        );
+        MACOSX_DEPLOYMENT_TARGET = 13.0;
+        PRODUCT_BUNDLE_IDENTIFIER = com.example.macosTokenizerTests;
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        SWIFT_VERSION = 5.0;
+        TEST_HOST = "$(BUNDLE_LOADER)";
+    };
+    name = Debug;
+};
+B7F0188A227F4AEF81D2AF18 /* Release */ = {
+    isa = XCBuildConfiguration;
+    buildSettings = {
+        BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/macos-tokenizer.app/Contents/MacOS/macos-tokenizer";
+        CODE_SIGN_STYLE = Automatic;
+        COMBINE_HIDPI_IMAGES = YES;
+        CURRENT_PROJECT_VERSION = 1;
+        GENERATE_INFOPLIST_FILE = YES;
+        LD_RUNPATH_SEARCH_PATHS = (
+            "$(inherited)",
+            "@executable_path/../Frameworks",
+            "@loader_path/../Frameworks",
+        );
+        MACOSX_DEPLOYMENT_TARGET = 13.0;
+        PRODUCT_BUNDLE_IDENTIFIER = com.example.macosTokenizerTests;
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        SWIFT_VERSION = 5.0;
+        TEST_HOST = "$(BUNDLE_LOADER)";
+    };
+    name = Release;
 };
 /* End XCBuildConfiguration section */
 
@@ -476,13 +628,22 @@ defaultConfigurationIsVisible = 0;
 defaultConfigurationName = Release;
 };
 B4F5C1CB2B3ED4F600A67135 /* Build configuration list for PBXNativeTarget "macos-tokenizer" */ = {
-isa = XCConfigurationList;
-buildConfigurations = (
-B4F5C1C82B3ED4F600A67135 /* Debug */,
-B4F5C1C92B3ED4F600A67135 /* Release */,
-);
-defaultConfigurationIsVisible = 0;
-defaultConfigurationName = Release;
+    isa = XCConfigurationList;
+    buildConfigurations = (
+        B4F5C1C82B3ED4F600A67135 /* Debug */,
+        B4F5C1C92B3ED4F600A67135 /* Release */,
+    );
+    defaultConfigurationIsVisible = 0;
+    defaultConfigurationName = Release;
+};
+B2348D8445FF491F9DB07752 /* Build configuration list for PBXNativeTarget "macos-tokenizerTests" */ = {
+    isa = XCConfigurationList;
+    buildConfigurations = (
+        B925708ED47A40B28F6DE3A4 /* Debug */,
+        B7F0188A227F4AEF81D2AF18 /* Release */,
+    );
+    defaultConfigurationIsVisible = 0;
+    defaultConfigurationName = Release;
 };
 /* End XCConfigurationList section */
 };
