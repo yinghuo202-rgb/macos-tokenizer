@@ -27,20 +27,52 @@ runOnlyForDeploymentPostprocessing = 0;
 
 /* Begin PBXGroup section */
 B4F5C1B62B3ED4F500A67135 = {
-isa = PBXGroup;
-children = (
-B4F5C1BE2B3ED4F500A67135 /* App */,
-B4F5C1C12B3ED4F500A67135 /* Products */,
-);
-sourceTree = "<group>";
+    isa = PBXGroup;
+    children = (
+        B4F5C1BE2B3ED4F500A67135 /* App */,
+        B4F5C1D22B3ED65A00A67135 /* Core */,
+        B4F5C1D32B3ED65A00A67135 /* Features */,
+        B4F5C1D42B3ED65A00A67135 /* Resources */,
+        B4F5C1D52B3ED65A00A67135 /* Tests */,
+        B4F5C1C12B3ED4F500A67135 /* Products */,
+    );
+    sourceTree = "<group>";
 };
 B4F5C1BE2B3ED4F500A67135 /* App */ = {
-isa = PBXGroup;
-children = (
-B4F5C1BF2B3ED4F500A67135 /* App.swift */,
-);
-path = App;
-sourceTree = "<group>";
+    isa = PBXGroup;
+    children = (
+        B4F5C1BF2B3ED4F500A67135 /* App.swift */,
+    );
+    path = App;
+    sourceTree = "<group>";
+};
+B4F5C1D22B3ED65A00A67135 /* Core */ = {
+    isa = PBXGroup;
+    children = (
+    );
+    path = Core;
+    sourceTree = "<group>";
+};
+B4F5C1D32B3ED65A00A67135 /* Features */ = {
+    isa = PBXGroup;
+    children = (
+    );
+    path = Features;
+    sourceTree = "<group>";
+};
+B4F5C1D42B3ED65A00A67135 /* Resources */ = {
+    isa = PBXGroup;
+    children = (
+    );
+    path = Resources;
+    sourceTree = "<group>";
+};
+B4F5C1D52B3ED65A00A67135 /* Tests */ = {
+    isa = PBXGroup;
+    children = (
+    );
+    path = Tests;
+    sourceTree = "<group>";
 };
 B4F5C1C12B3ED4F500A67135 /* Products */ = {
 isa = PBXGroup;
