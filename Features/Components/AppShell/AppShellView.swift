@@ -3,6 +3,7 @@ import SwiftUI
 /// `AppShellView` 构建应用壳层，提供统一的侧边栏导航与顶部工具栏。
 struct AppShellView: View {
     @ObservedObject var tokenizerViewModel: TokenizerViewModel
+    @StateObject private var dashboardViewModel = DashboardViewModel()
     @State private var selection: AppRoute? = .analyze
 
     var body: some View {
@@ -57,7 +58,7 @@ struct AppShellView: View {
     private func detailContent(for route: AppRoute) -> some View {
         switch route {
         case .dashboard:
-            DashboardPlaceholderView()
+            DashboardView(viewModel: dashboardViewModel)
         case .analyze:
             AnalyzeWorkspaceView(viewModel: tokenizerViewModel)
         case .batch:
