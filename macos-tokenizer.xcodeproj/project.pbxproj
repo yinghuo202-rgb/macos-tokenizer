@@ -8,11 +8,46 @@ objects = {
 
 /* Begin PBXBuildFile section */
 B4F5C1C02B3ED4F500A67135 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F5C1BF2B3ED4F500A67135 /* App.swift */; };
+2FA758887D5B43D4BAA84185 /* FileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F0A11620D148B18BCFCAA2 /* FileImporter.swift */; };
+26FA4A835E1D48BC9B318148 /* TokenExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380E75CE018453A9CD891EC /* TokenExportService.swift */; };
+CFD9CB89616A44F4B49624E0 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34023BE631A4445FB75963AF /* ThemeManager.swift */; };
+2AEA284DF42942B0994C88B7 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B4C7594F7E4083ABC3E937 /* DesignSystem.swift */; };
+DBA28C412741492E8D040DBB /* TokenizerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2060CB0B49D24E7192DCFBE0 /* TokenizerEngine.swift */; };
+E20E962A1E964F9F8480E8FB /* DropZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FD861277FFE48B5A43417D6 /* DropZone.swift */; };
+2214969DE3B344BB8E600140 /* SparklineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1239203C21F4857BDCA8CA2 /* SparklineView.swift */; };
+9B5482B607A943DDA6BD14AB /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997A90E822BD4BE3B08B5DD0 /* Card.swift */; };
+3EABEDA8703D49E79971A2A2 /* StatCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6D09443B664F9BB4254A94 /* StatCard.swift */; };
+26062FB38D204820879B96D9 /* Badge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61421DCE6538403DB011DD6B /* Badge.swift */; };
+4463EE45E32344BCA1A1EA15 /* AppShellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138052E8AFE440BFB0B2A332 /* AppShellView.swift */; };
+A7A1FF5C8920499F894511F0 /* TokenizerMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2D013C8FFC43D2945128AB /* TokenizerMainView.swift */; };
+3BCEA9DC3231446B98732400 /* TokenizerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CC7D8E166C4470BD7F6792 /* TokenizerViewModel.swift */; };
+D8036422E7804923AAC0955D /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB90BD7D50E49968D536BEE /* DashboardViewModel.swift */; };
+736E692AD897481B89442999 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE8DB25B4C9412A87D1EBA0 /* DashboardView.swift */; };
+FBE6498FE6F9436B99328C31 /* AppRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90A3A35E0EE46B0BE829BDA /* AppRoute.swift */; };
+04502E164CD842D590BA495E /* PlaceholderViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB6A35009C74410B4B03E35 /* PlaceholderViews.swift */; };
+CF24E5F479E44F8AB7EEF3DC /* CoreXLSX in Frameworks */ = {isa = PBXBuildFile; productRef = EEF23352D262499E805EC943 /* CoreXLSX */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 B4F5C1BF2B3ED4F500A67135 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 B4F5C1C22B3ED4F500A67135 /* macos-tokenizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "macos-tokenizer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+C3F0A11620D148B18BCFCAA2 /* FileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImporter.swift; sourceTree = "<group>"; };
+7380E75CE018453A9CD891EC /* TokenExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenExportService.swift; sourceTree = "<group>"; };
+34023BE631A4445FB75963AF /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+C7B4C7594F7E4083ABC3E937 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+2060CB0B49D24E7192DCFBE0 /* TokenizerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenizerEngine.swift; sourceTree = "<group>"; };
+7FD861277FFE48B5A43417D6 /* DropZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropZone.swift; sourceTree = "<group>"; };
+B1239203C21F4857BDCA8CA2 /* SparklineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparklineView.swift; sourceTree = "<group>"; };
+997A90E822BD4BE3B08B5DD0 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+5B6D09443B664F9BB4254A94 /* StatCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCard.swift; sourceTree = "<group>"; };
+61421DCE6538403DB011DD6B /* Badge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Badge.swift; sourceTree = "<group>"; };
+138052E8AFE440BFB0B2A332 /* AppShellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShellView.swift; sourceTree = "<group>"; };
+CC2D013C8FFC43D2945128AB /* TokenizerMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenizerMainView.swift; sourceTree = "<group>"; };
+64CC7D8E166C4470BD7F6792 /* TokenizerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenizerViewModel.swift; sourceTree = "<group>"; };
+CBB90BD7D50E49968D536BEE /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+6EE8DB25B4C9412A87D1EBA0 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+B90A3A35E0EE46B0BE829BDA /* AppRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRoute.swift; sourceTree = "<group>"; };
+0AB6A35009C74410B4B03E35 /* PlaceholderViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderViews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -20,6 +55,7 @@ B4F5C1BC2B3ED4F500A67135 /* Frameworks */ = {
 isa = PBXFrameworksBuildPhase;
 buildActionMask = 2147483647;
 files = (
+    CF24E5F479E44F8AB7EEF3DC /* CoreXLSX in Frameworks */,
 );
 runOnlyForDeploymentPostprocessing = 0;
 };
@@ -49,6 +85,10 @@ B4F5C1BE2B3ED4F500A67135 /* App */ = {
 B4F5C1D22B3ED65A00A67135 /* Core */ = {
     isa = PBXGroup;
     children = (
+        780179E4928D4B5897785491 /* FileImporter */,
+        C1C538560398447F9A565F82 /* Export */,
+        92AFCC46E3634B0E860D32AD /* Infra */,
+        F973C904657B4451AD509982 /* Tokenization */,
     );
     path = Core;
     sourceTree = "<group>";
@@ -56,6 +96,10 @@ B4F5C1D22B3ED65A00A67135 /* Core */ = {
 B4F5C1D32B3ED65A00A67135 /* Features */ = {
     isa = PBXGroup;
     children = (
+        5DC748DC03EF4A2CBF636E67 /* Components */,
+        D90358AE4B2C47E2A32EDCDE /* TokenizerUI */,
+        7D9831FFE2904D21AE3D3577 /* Dashboard */,
+        2E63200CA82C4F2AB1E8B800 /* Shell */,
     );
     path = Features;
     sourceTree = "<group>";
@@ -82,24 +126,108 @@ B4F5C1C22B3ED4F500A67135 /* macos-tokenizer.app */,
 name = Products;
 sourceTree = "<group>";
 };
+780179E4928D4B5897785491 /* FileImporter */ = {
+    isa = PBXGroup;
+    children = (
+        C3F0A11620D148B18BCFCAA2 /* FileImporter.swift */,
+    );
+    path = FileImporter;
+    sourceTree = "<group>";
+};
+C1C538560398447F9A565F82 /* Export */ = {
+    isa = PBXGroup;
+    children = (
+        7380E75CE018453A9CD891EC /* TokenExportService.swift */,
+    );
+    path = Export;
+    sourceTree = "<group>";
+};
+92AFCC46E3634B0E860D32AD /* Infra */ = {
+    isa = PBXGroup;
+    children = (
+        34023BE631A4445FB75963AF /* ThemeManager.swift */,
+        C7B4C7594F7E4083ABC3E937 /* DesignSystem.swift */,
+    );
+    path = Infra;
+    sourceTree = "<group>";
+};
+F973C904657B4451AD509982 /* Tokenization */ = {
+    isa = PBXGroup;
+    children = (
+        2060CB0B49D24E7192DCFBE0 /* TokenizerEngine.swift */,
+    );
+    path = Tokenization;
+    sourceTree = "<group>";
+};
+5DC748DC03EF4A2CBF636E67 /* Components */ = {
+    isa = PBXGroup;
+    children = (
+        61421DCE6538403DB011DD6B /* Badge.swift */,
+        997A90E822BD4BE3B08B5DD0 /* Card.swift */,
+        7FD861277FFE48B5A43417D6 /* DropZone.swift */,
+        B1239203C21F4857BDCA8CA2 /* SparklineView.swift */,
+        5B6D09443B664F9BB4254A94 /* StatCard.swift */,
+        9B4BC57384E343848C567513 /* AppShell */,
+    );
+    path = Components;
+    sourceTree = "<group>";
+};
+9B4BC57384E343848C567513 /* AppShell */ = {
+    isa = PBXGroup;
+    children = (
+        138052E8AFE440BFB0B2A332 /* AppShellView.swift */,
+    );
+    path = AppShell;
+    sourceTree = "<group>";
+};
+D90358AE4B2C47E2A32EDCDE /* TokenizerUI */ = {
+    isa = PBXGroup;
+    children = (
+        CC2D013C8FFC43D2945128AB /* TokenizerMainView.swift */,
+        64CC7D8E166C4470BD7F6792 /* TokenizerViewModel.swift */,
+    );
+    path = TokenizerUI;
+    sourceTree = "<group>";
+};
+7D9831FFE2904D21AE3D3577 /* Dashboard */ = {
+    isa = PBXGroup;
+    children = (
+        CBB90BD7D50E49968D536BEE /* DashboardViewModel.swift */,
+        6EE8DB25B4C9412A87D1EBA0 /* DashboardView.swift */,
+    );
+    path = Dashboard;
+    sourceTree = "<group>";
+};
+2E63200CA82C4F2AB1E8B800 /* Shell */ = {
+    isa = PBXGroup;
+    children = (
+        B90A3A35E0EE46B0BE829BDA /* AppRoute.swift */,
+        0AB6A35009C74410B4B03E35 /* PlaceholderViews.swift */,
+    );
+    path = Shell;
+    sourceTree = "<group>";
+};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
 B4F5C1BD2B3ED4F500A67135 /* macos-tokenizer */ = {
-isa = PBXNativeTarget;
-buildConfigurationList = B4F5C1CB2B3ED4F600A67135 /* Build configuration list for PBXNativeTarget "macos-tokenizer" */;
-buildPhases = (
-B4F5C1BB2B3ED4F500A67135 /* Sources */,
-B4F5C1BC2B3ED4F500A67135 /* Frameworks */,
-);
-buildRules = (
-);
-dependencies = (
-);
-name = "macos-tokenizer";
-productName = "macos-tokenizer";
-productReference = B4F5C1C22B3ED4F500A67135 /* macos-tokenizer.app */;
-productType = "com.apple.product-type.application";
+    isa = PBXNativeTarget;
+    buildConfigurationList = B4F5C1CB2B3ED4F600A67135 /* Build configuration list for PBXNativeTarget "macos-tokenizer" */;
+    buildPhases = (
+        B4F5C1BB2B3ED4F500A67135 /* Sources */,
+        B4F5C1BC2B3ED4F500A67135 /* Frameworks */,
+    );
+    buildRules = (
+    );
+    dependencies = (
+    );
+    packageProductDependencies = (
+        EEF23352D262499E805EC943 /* CoreXLSX */,
+    );
+    name = "macos-tokenizer";
+    productName = "macos-tokenizer";
+    productReference = B4F5C1C22B3ED4F500A67135 /* macos-tokenizer.app */;
+    productType = "com.apple.product-type.application";
 };
 /* End PBXNativeTarget section */
 
@@ -123,26 +251,65 @@ hasScannedForEncodings = 0;
 knownRegions = (
 en,
 );
-mainGroup = B4F5C1B62B3ED4F500A67135;
-productRefGroup = B4F5C1C12B3ED4F500A67135 /* Products */;
-projectDirPath = "";
-projectRoot = "";
-targets = (
-B4F5C1BD2B3ED4F500A67135 /* macos-tokenizer */,
-);
+    mainGroup = B4F5C1B62B3ED4F500A67135;
+    productRefGroup = B4F5C1C12B3ED4F500A67135 /* Products */;
+    projectDirPath = "";
+    projectRoot = "";
+    packageReferences = (
+        5E11A11642B643C3BBBBFA09 /* CoreXLSX */,
+    );
+    targets = (
+        B4F5C1BD2B3ED4F500A67135 /* macos-tokenizer */,
+    );
 };
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
 B4F5C1BB2B3ED4F500A67135 /* Sources */ = {
-isa = PBXSourcesBuildPhase;
-buildActionMask = 2147483647;
-files = (
-B4F5C1C02B3ED4F500A67135 /* App.swift in Sources */,
-);
-runOnlyForDeploymentPostprocessing = 0;
+    isa = PBXSourcesBuildPhase;
+    buildActionMask = 2147483647;
+    files = (
+        B4F5C1C02B3ED4F500A67135 /* App.swift in Sources */,
+        2FA758887D5B43D4BAA84185 /* FileImporter.swift in Sources */,
+        26FA4A835E1D48BC9B318148 /* TokenExportService.swift in Sources */,
+        CFD9CB89616A44F4B49624E0 /* ThemeManager.swift in Sources */,
+        2AEA284DF42942B0994C88B7 /* DesignSystem.swift in Sources */,
+        DBA28C412741492E8D040DBB /* TokenizerEngine.swift in Sources */,
+        E20E962A1E964F9F8480E8FB /* DropZone.swift in Sources */,
+        2214969DE3B344BB8E600140 /* SparklineView.swift in Sources */,
+        9B5482B607A943DDA6BD14AB /* Card.swift in Sources */,
+        3EABEDA8703D49E79971A2A2 /* StatCard.swift in Sources */,
+        26062FB38D204820879B96D9 /* Badge.swift in Sources */,
+        4463EE45E32344BCA1A1EA15 /* AppShellView.swift in Sources */,
+        A7A1FF5C8920499F894511F0 /* TokenizerMainView.swift in Sources */,
+        3BCEA9DC3231446B98732400 /* TokenizerViewModel.swift in Sources */,
+        D8036422E7804923AAC0955D /* DashboardViewModel.swift in Sources */,
+        736E692AD897481B89442999 /* DashboardView.swift in Sources */,
+        FBE6498FE6F9436B99328C31 /* AppRoute.swift in Sources */,
+        04502E164CD842D590BA495E /* PlaceholderViews.swift in Sources */,
+    );
+    runOnlyForDeploymentPostprocessing = 0;
 };
 /* End PBXSourcesBuildPhase section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+5E11A11642B643C3BBBBFA09 /* CoreXLSX */ = {
+    isa = XCRemoteSwiftPackageReference;
+    repositoryURL = "https://github.com/CoreOffice/CoreXLSX.git";
+    requirement = {
+        kind = upToNextMajorVersion;
+        minimumVersion = 0.17.1;
+    };
+};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+EEF23352D262499E805EC943 /* CoreXLSX */ = {
+    isa = XCSwiftPackageProductDependency;
+    package = 5E11A11642B643C3BBBBFA09 /* CoreXLSX */;
+    productName = CoreXLSX;
+};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCBuildConfiguration section */
 B4F5C1C82B3ED4F600A67135 /* Debug */ = {
