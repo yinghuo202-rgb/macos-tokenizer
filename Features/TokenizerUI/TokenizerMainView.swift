@@ -42,11 +42,50 @@ struct TokenizerMainView: View {
 
     private var resultSection: some View {
         VStack(alignment: .leading, spacing: 12) {
+            searchBar
             header
             tokenList
         }
         .padding()
         .frame(minWidth: 320, maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var searchBar: some View {
+        HStack(spacing: 12) {
+            HStack(spacing: 6) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(.secondary)
+                TextField(
+                    "搜索分词",
+                    text: Binding(
+                        get: { viewModel.searchQuery },
+                        set: { viewModel.updateSearch(query: $0) }
+                    )
+                )
+                .textFieldStyle(.plain)
+            }
+            .padding(.vertical, 6)
+            .padding(.horizontal, 8)
+            .background(Color(NSColor.textBackgroundColor))
+            .cornerRadius(8)
+
+            Spacer()
+
+            Text("匹配 \(viewModel.matchCount) 项")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+
+            if !viewModel.searchQuery.isEmpty {
+                Button {
+                    viewModel.updateSearch(query: "")
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("清除搜索")
+            }
+        }
     }
 
     private var header: some View {
@@ -65,16 +104,17 @@ struct TokenizerMainView: View {
     private var tokenList: some View {
         Group {
             if viewModel.tokens.isEmpty {
-                VStack(spacing: 8) {
-                    Image(systemName: "text.magnifyingglass")
-                        .font(.system(size: 42))
+                VStack(spacing: 12) {
+                    Image(systemName: "doc.text.magnifyingglass")
+                        .font(.system(size: 48))
                         .foregroundStyle(.secondary)
-                    Text("暂无结果")
+                    Text("还没有分词结果")
                         .font(.title3)
                         .foregroundStyle(.secondary)
-                    Text("请输入文本以查看分词结果")
+                    Text("粘贴文本、拖入 .txt/.xlsx，或按 ⌘O 打开文件开始分词。")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
@@ -87,6 +127,9 @@ struct TokenizerMainView: View {
                         Text(token)
                             .font(.body)
                             .multilineTextAlignment(.leading)
+                            .padding(4)
+                            .background(viewModel.isTokenMatched(index: index) ? Color.accentColor.opacity(0.2) : Color.clear)
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
                         Spacer()
                         if let frequency = viewModel.tokenFrequencies[token] {
                             Text("频次：\(frequency)")

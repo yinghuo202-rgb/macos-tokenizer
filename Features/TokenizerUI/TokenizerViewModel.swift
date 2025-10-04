@@ -34,9 +34,21 @@ final class TokenizerViewModel: ObservableObject {
     /// 当前需要展示的提示信息。
     @Published var activeAlert: TokenizerAlert?
 
+    /// 搜索框输入的关键字，驱动分词结果高亮。
+    @Published var searchQuery: String = ""
+
+    /// 当前搜索关键字匹配到的 token 数量。
+    @Published var matchCount: Int = 0
+
     private let engine: TokenizerEngine
     private let fileImportService: FileImportService
     private let exportService: TokenExportService
+    private let searchQueue = DispatchQueue(label: "com.macos-tokenizer.search", qos: .userInitiated)
+    private var searchWorkItem: DispatchWorkItem?
+    private var normalizedSearchQuery: String = ""
+
+    /// 当前匹配到的 token 索引集合，用于驱动列表高亮。
+    @Published private(set) var matchedTokenIndices: Set<Int> = []
 
     /// 创建视图模型实例。
     /// - Parameters:
@@ -58,6 +70,7 @@ final class TokenizerViewModel: ObservableObject {
         totalTokenCount = result.count
         uniqueTokenCount = Set(result).count
         tokenFrequencies = buildFrequencyMap(from: result)
+        refreshSearchResultsForCurrentQuery()
     }
 
     private func buildFrequencyMap(from tokens: [String]) -> [String: Int] {
@@ -205,5 +218,68 @@ final class TokenizerViewModel: ObservableObject {
             print("[错误] \(message)")
         }
         activeAlert = TokenizerAlert(message: message)
+    }
+
+    /// 更新搜索关键字，使用去抖控制匹配刷新频率。
+    /// - Parameter query: 最新输入的搜索关键字。
+    public func updateSearch(query: String) {
+        searchWorkItem?.cancel()
+        searchQuery = query
+        normalizedSearchQuery = normalize(query: query)
+        matchedTokenIndices = []
+        matchCount = 0
+
+        guard !normalizedSearchQuery.isEmpty else { return }
+
+        scheduleSearch(for: normalizedSearchQuery, delay: 0.2)
+    }
+
+    /// 判断指定位置的 token 是否匹配当前搜索。
+    /// - Parameter index: token 在结果列表中的索引。
+    /// - Returns: 是否为匹配项。
+    public func isTokenMatched(index: Int) -> Bool {
+        matchedTokenIndices.contains(index)
+    }
+
+    private func normalize(query: String) -> String {
+        query.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private func scheduleSearch(for query: String, delay: TimeInterval) {
+        let currentTokens = tokens
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            let (indices, count) = self.performSearch(tokens: currentTokens, query: query)
+            DispatchQueue.main.async {
+                guard self.normalizedSearchQuery == query else { return }
+                self.matchedTokenIndices = indices
+                self.matchCount = count
+            }
+        }
+        searchWorkItem = workItem
+        searchQueue.asyncAfter(deadline: .now() + delay, execute: workItem)
+    }
+
+    private func performSearch(tokens: [String], query: String) -> (Set<Int>, Int) {
+        guard !query.isEmpty else { return ([], 0) }
+        var matchedIndices: Set<Int> = []
+        var count = 0
+        for (index, token) in tokens.enumerated() {
+            if token.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil {
+                matchedIndices.insert(index)
+                count += 1
+            }
+        }
+        return (matchedIndices, count)
+    }
+
+    private func refreshSearchResultsForCurrentQuery() {
+        searchWorkItem?.cancel()
+        guard !normalizedSearchQuery.isEmpty else {
+            matchedTokenIndices = []
+            matchCount = 0
+            return
+        }
+        scheduleSearch(for: normalizedSearchQuery, delay: 0)
     }
 }
