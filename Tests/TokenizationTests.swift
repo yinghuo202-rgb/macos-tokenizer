@@ -28,12 +28,10 @@ final class TokenizationTests: XCTestCase {
         XCTAssertTrue(tokens.contains("world"), "English words should be tokenized correctly")
         XCTAssertTrue(tokens.contains("123"), "Numbers should appear in the token list")
 
-        let punctuation = CharacterSet.punctuationCharacters
-        XCTAssertFalse(tokens.contains { token in
-            token.rangeOfCharacter(from: punctuation) != nil
-        }, "Tokens should not include punctuation marks")
+        XCTAssertTrue(tokens.contains("，"), "Chinese punctuation should be surfaced as a standalone token")
+        XCTAssertTrue(tokens.contains("！"), "Full-width punctuation should also be exposed when present")
 
-        XCTAssertTrue((3...4).contains(tokens.count), "Mixed input should produce between three and four tokens depending on locale segmentation")
+        XCTAssertEqual(tokens.count, 5, "Mixed input should produce five tokens, including punctuation marks")
         XCTAssertEqual(tokens.count, Set(tokens).count, "Unique token count should match the number of produced tokens")
     }
 
