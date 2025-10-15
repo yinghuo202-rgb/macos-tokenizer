@@ -408,7 +408,7 @@ B4F5C1BB2B3ED4F500A67135 /* Sources */ = {
     repositoryURL = "https://github.com/CoreOffice/CoreXLSX.git";
     requirement = {
         kind = upToNextMajorVersion;
-        minimumVersion = 0.17.1;
+        minimumVersion = 0.14.0;
     };
 };
 /* End XCRemoteSwiftPackageReference section */
